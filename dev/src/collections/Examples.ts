@@ -1,17 +1,32 @@
-import { CollectionConfig } from 'payload/types';
+import { CollectionConfig } from 'payload/types'
+import { JsonSchemaFormField } from '../../../src'
 
-// Example Collection - For reference only, this must be added to payload.config.ts to be used.
-const Examples: CollectionConfig = {
-  slug: 'examples',
+const JsonFromExamples: CollectionConfig = {
+  slug: 'jsonformExamples',
+  access: { read: () => true },
   admin: {
-    useAsTitle: 'someField',
+    useAsTitle: 'title',
   },
   fields: [
     {
-      name: 'someField',
+      name: 'title',
       type: 'text',
     },
+    ...JsonSchemaFormField(
+      {
+        name: 'data',
+        required: true,
+        access: {
+          read: () => true 
+        },
+      },
+      {
+        hideSchemas: true,
+        required: true,
+        readOnly: false
+      },
+    )
   ],
 }
 
-export default Examples;
+export default JsonFromExamples
