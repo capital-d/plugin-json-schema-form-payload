@@ -2,7 +2,10 @@
   "name": "plugin-json-schema-form-payload",
   "version": "0.0.1",
   "homepage:": "https://payloadcms.com",
-  "repository": "git@github.com:payloadcms/payload-plugin-template.git",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/capital-d/plugin-json-schema-form-payload.git"
+  },
   "description": "Blank plugin template for Payload",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
