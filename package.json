@@ -1,5 +1,5 @@
 {
-  "name": "@rost/plugin-json-schema-form-payload",
+  "name": "plugin-json-schema-form-payload",
   "version": "0.0.1",
   "homepage:": "https://payloadcms.com",
   "repository": {
