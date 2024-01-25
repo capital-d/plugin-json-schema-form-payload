@@ -33,6 +33,10 @@
   },
   "devDependencies": {
     "@payloadcms/eslint-config": "^1.1.0",
+    "@rjsf/core": "^5.15.1",
+    "@rjsf/mui": "^5.15.1",
+    "@rjsf/utils": "^5.15.1",
+    "@rjsf/validator-ajv8": "^5.15.1",
     "@swc/jest": "^0.2.28",
     "@types/jest": "^29.5.11",
     "@typescript-eslint/eslint-plugin": "5.62.0",
@@ -47,14 +51,10 @@
     "payload": "^2.6.0",
     "prettier": "^2.7.1",
     "react": "^18.2.0",
+    "rxjs": "^7.8.1",
     "typescript": "^5.3.3",
     "webpack": "^5.89.0"
   },
   "dependencies": {
-    "@rjsf/core": "^5.15.1",
-    "@rjsf/mui": "^5.15.1",
-    "@rjsf/utils": "^5.15.1",
-    "@rjsf/validator-ajv8": "^5.15.1",
-    "rxjs": "^7.8.1"
   }
 }

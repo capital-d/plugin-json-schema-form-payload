@@ -3,7 +3,6 @@ import type { Config, Plugin } from 'payload/config'
 import { onInitExtension } from './onInitExtension'
 import type { PluginTypes } from './types'
 import { extendWebpackConfig } from './webpack'
-import AfterDashboard from './components/AfterDashboard'
 import newCollection from './newCollection'
 
 type PluginType = (pluginOptions: PluginTypes) => Plugin
@@ -29,7 +28,6 @@ export const jsonSchemaFormPlugin =
           // Add additional admin components here
           afterDashboard: [
             ...(config.admin?.components?.afterDashboard || []),
-            AfterDashboard,
           ],
         },
       }
