@@ -1,5 +1,5 @@
 {
-  "name": "json-schema-form-plugin",
+  "name": "plugin-json-schema-form-payload",
   "version": "0.0.1",
   "homepage:": "https://payloadcms.com",
   "repository": "git@github.com:payloadcms/payload-plugin-template.git",

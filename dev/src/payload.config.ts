@@ -5,7 +5,7 @@ import Examples from './collections/Examples';
 import { mongooseAdapter } from '@payloadcms/db-mongodb'
 import { webpackBundler } from '@payloadcms/bundler-webpack'
 import { slateEditor } from '@payloadcms/richtext-slate'
-// import { samplePlugin } from '../../src/index'
+// import { jsonSchemaFormPlugin } from '../../src/index'
 
 export default buildConfig({
   admin: {
@@ -37,7 +37,8 @@ export default buildConfig({
   graphQL: {
     schemaOutputFile: path.resolve(__dirname, 'generated-schema.graphql'),
   },
-  plugins: [],
+  plugins: [
+  ],
   db: mongooseAdapter({
     url: process.env.DATABASE_URI,
   }),
