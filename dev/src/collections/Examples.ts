@@ -1,5 +1,10 @@
 import { CollectionConfig } from 'payload/types'
 import { JsonSchemaFormField } from '../../../src'
+import { admins } from '../access/admins'
+import { isAdminField } from '../access/isAdminField'
+import { checkUserRoles } from '../utilities/checkUserRoles'
+import { User } from 'payload/dist/auth'
+import { isCondition } from '../access/isCondition'
 
 const JsonFromExamples: CollectionConfig = {
   slug: 'jsonformExamples',
@@ -23,7 +28,15 @@ const JsonFromExamples: CollectionConfig = {
       {
         hideSchemas: true,
         required: true,
-        readOnly: false
+        readOnly: false,
+        schemas: {
+          condition: isCondition,
+          access: {
+            create: isAdminField,
+            update: isAdminField,
+            read: () => true,
+          }
+        }
       },
     )
   ],

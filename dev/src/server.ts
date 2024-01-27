@@ -1,6 +1,7 @@
 import express from 'express'
 import payload from 'payload'
 import { InitOptions } from 'payload/config'
+import { seed } from './seed'
 
 require('dotenv').config()
 const app = express()
@@ -22,6 +23,13 @@ export const start = async (args?: Partial<InitOptions>) => {
   })
 
   // Add your own express routes here
+
+  
+  // if (process.env.PAYLOAD_SEED === 'true') {
+  //   payload.logger.info('---- SEEDING DATABASE ----')
+  //   await seed(payload)
+  // }
+
 
   app.listen(3000)
 }

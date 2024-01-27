@@ -1,4 +1,4 @@
-import type { CollectionAfterReadHook, Field, FieldHook, JSONField } from 'payload/types'
+import type { CollectionAfterReadHook, CollectionConfig, Condition, Field, FieldBase, FieldHook, JSONField } from 'payload/types'
 // import type { Config } from 'payload/config'
 import deepMerge from '../../utilities/deepMerge'
 // import { NumberField as NumberFieldType, JSONField } from 'payload/types'
@@ -11,7 +11,11 @@ export interface JsonFromConfig {
   required: boolean,
   readOnly: boolean,
   hideSchemas?: boolean,
-  callback?: (value: string) => number
+  callback?: (value: string) => number,
+  schemas?: {
+    condition?: Condition,
+    access?: FieldBase['access']
+  }
 }
 
 export type Config = JsonFromConfig & {}
@@ -67,42 +71,37 @@ export const JsonSchemaFormField:JsonFrom = (overrides, config) => {
   const helperFields = {
         label: 'Helper schemas',
         type: 'collapsible', // required
-        access: {
-          create: ({ req: { user } }: any) => { 
-            console.log('user', user)
-            //only admins can create
-            if(!user) {
-              return false
-            }
-            return true
-          },
-          read: ({ req: { user } }: any) => { 
-            console.log('user', user)
-            if (config.hideSchemas) {
-              return false
-            }
-            return true
-           },
-          update: ({ req: { user } }: any) => { 
-            //only admins can update
-            console.log('user', user)
-            if(!user) {
-              return false
-            }
-            return true
-           },
-        },
+        
+        access: config.schemas?.access ? { 
+          ...config.schemas.access
+        } : {},
+        // access: {
+        //   create: ({ req: { user } }: any) => { 
+        //     console.log('user', user)
+        //     //only admins can create
+        //     if(!user) {
+        //       return false
+        //     }
+        //     return true
+        //   },
+        //   read: ({ req: { user } }: any) => { 
+        //     console.log('user', user)
+        //     if (config.hideSchemas) {
+        //       return false
+        //     }
+        //     return true
+        //    },
+        //   update: ({ req: { user } }: any) => { 
+        //     //only admins can update
+        //     console.log('user', user)
+        //     if(!user) {
+        //       return false
+        //     }
+        //     return true
+        //    },
+        // },
         admin: {
-          condition: (data, siblingData, { user }) => {
-            //hide for non admin
-            if (true) {
-              return true
-            }
-            //get fn from config and pass user
-            // config.hideSchemas.adimn(user)
-
-            return false
-          },
+          condition: config?.schemas?.condition,
         },
         fields: [
           {
@@ -115,9 +114,11 @@ export const JsonSchemaFormField:JsonFrom = (overrides, config) => {
                 admin: {
                   width: '50%',
                 },
-                access: {
-                  read: () => false
-                }
+                access: config.schemas?.access ? { 
+                  ...config.schemas.access
+                } : {
+                  read: () => true
+                },
               },
               {
                 name: 'uiSchema',
@@ -125,7 +126,10 @@ export const JsonSchemaFormField:JsonFrom = (overrides, config) => {
                 required: false,
                 admin: {
                   width: '50%',
-                }
+                },
+                access: config.schemas?.access ? { 
+                  ...config.schemas.access
+                } : {},
               },
             ]
           }
