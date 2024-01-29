@@ -102,6 +102,7 @@ export const JsonSchemaFormField:JsonFrom = (overrides, config) => {
         // },
         admin: {
           condition: config?.schemas?.condition,
+          initCollapsed: true
         },
         fields: [
           {

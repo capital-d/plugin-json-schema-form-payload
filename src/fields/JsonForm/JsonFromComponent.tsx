@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Label, useField, useFormFields } from 'payload/components/forms'
 import Error from 'payload/dist/admin/components/forms/Error'
-import type { TextField, NumberField, JSONField } from 'payload/types'
+import { type TextField, type NumberField, type JSONField, type Fields, FormField } from 'payload/types'
 
 import { JsonFromConfig } from '.'
 import FieldDescription from 'payload/dist/admin/components/forms/FieldDescription'
@@ -55,6 +55,22 @@ type Props = JSONField & {
   }
 }
 
+const getKey = (key: string) => /schema/.test(key) ? 'schemaField' : /ui_schema/.test(key) ? 'uiSchemaField' : key
+
+const filterRequiredFields = (fields: Fields) => {
+  const values = Object.entries(fields)
+
+  const filtered = values.filter(
+    ([key, _]) => {
+      const isSchema = /schema|ui_schema/.test(key)
+      return isSchema
+    }
+  )
+  .reduce((acc, [key, value]) => ({...acc, [getKey(key)]: value}), {schemaField: null, uiSchemaField: null} as {[k:string]: FormField|null})
+
+  return filtered;
+}
+
 const JsonFromComponent: React.FC<Props> = ({
   readOnly,
   className,
@@ -70,12 +86,12 @@ const JsonFromComponent: React.FC<Props> = ({
   // const { value, setValue, showError, errorMessage } = useField<{data:any, schema:RJSFSchema, uiSchema:UiSchema}>({ path })
   const { value, setValue, showError, errorMessage } = useField<any>({ path })
 
-  const {fields: [schemaField, uiSchemaField ], dispatch} = useFormFields(([fields, dispatch]) => ({fields: [fields.schema, fields.uiSchema], dispatch}))
+  const {fields: {schemaField, uiSchemaField}, dispatch} = useFormFields(([fields, dispatch]) => ({fields: filterRequiredFields(fields), dispatch}))
   // const { value: schema, setValue: setSchema } = useField<RJSFSchema>({ path: 'schema' })
   // const { value: uiSchemaRaw, setValue: setUiSchema } = useField<Props>({ path: 'uiSchema' })
 
-  const {value: schema} = schemaField
-  const {value: uiSchemaRaw} = uiSchemaField
+  const {value: schema} = schemaField ?? {value: null}
+  const {value: uiSchemaRaw} = uiSchemaField ?? {value: null}
 
   const editorOptions = admin?.editorOptions
   const { callback, ...componentProps } = config
@@ -84,14 +100,12 @@ const JsonFromComponent: React.FC<Props> = ({
 
   const uiSchema = useMemo(
     () => {
-      console.log('THOS MEMO')
       const newSchema = uiSchemaRaw ? { ...uiSchemaRaw, ...UISCHEMA } : UISCHEMA;
       return newSchema
     },
     [uiSchemaRaw]
   );
 
-  console.log('TEST RENDERING')
 
   useEffect(() => {
     const subscription = subject.pipe(debounceTime(1000)).subscribe(handleChangeSubscription)
