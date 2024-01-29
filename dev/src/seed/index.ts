@@ -7,7 +7,7 @@ export const seed = async (payload: Payload) => {
         collection: 'users',
         data: {
             roles: ['admin'],
-            email: 'admin@test.com',
+            email: 'admin@payloadcms.com',
             password: 'test',
         },
     });

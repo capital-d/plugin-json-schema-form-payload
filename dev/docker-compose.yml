@@ -26,6 +26,23 @@ services:
     logging:
       driver: none
 
+  db:
+    container_name: db
+    restart: always
+    image: postgres:13.4-alpine
+    environment:
+      # POSTGRES_DB: postgres
+      # POSTGRES_USER: postgres
+      # POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      # POSTGRES_HOST_AUTH_METHOD: trust
+    env_file:
+      - .env
+    ports:
+      - "5435:5432"
+
 volumes:
   data:
   node_modules:

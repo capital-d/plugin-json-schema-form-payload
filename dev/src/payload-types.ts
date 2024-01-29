@@ -10,13 +10,15 @@ export interface Config {
   collections: {
     jsonformExamples: JsonformExample;
     users: User;
+    innerSchema: InnerSchema;
+    'simple-page': SimplePage;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
   globals: {};
 }
 export interface JsonformExample {
-  id: string;
+  id: number;
   title?: string | null;
   data:
     | {
@@ -49,7 +51,7 @@ export interface JsonformExample {
   createdAt: string;
 }
 export interface User {
-  id: string;
+  id: number;
   roles?: ('admin' | 'editor')[] | null;
   updatedAt: string;
   createdAt: string;
@@ -62,11 +64,106 @@ export interface User {
   lockUntil?: string | null;
   password: string | null;
 }
+export interface InnerSchema {
+  id: number;
+  title?: string | null;
+  layout: {
+    columns?:
+      | {
+          content: {
+            data:
+              | {
+                  [k: string]: unknown;
+                }
+              | unknown[]
+              | string
+              | number
+              | boolean
+              | null;
+            schema:
+              | {
+                  [k: string]: unknown;
+                }
+              | unknown[]
+              | string
+              | number
+              | boolean
+              | null;
+            uiSchema?:
+              | {
+                  [k: string]: unknown;
+                }
+              | unknown[]
+              | string
+              | number
+              | boolean
+              | null;
+          };
+          enableLink?: boolean | null;
+          id?: string | null;
+        }[]
+      | null;
+    id?: string | null;
+    blockName?: string | null;
+    blockType: 'content';
+  }[];
+  updatedAt: string;
+  createdAt: string;
+}
+export interface SimplePage {
+  id: number;
+  title: string;
+  publishedAt?: string | null;
+  layout: {
+    columns?:
+      | {
+          content: {
+            data:
+              | {
+                  [k: string]: unknown;
+                }
+              | unknown[]
+              | string
+              | number
+              | boolean
+              | null;
+            schema:
+              | {
+                  [k: string]: unknown;
+                }
+              | unknown[]
+              | string
+              | number
+              | boolean
+              | null;
+            uiSchema?:
+              | {
+                  [k: string]: unknown;
+                }
+              | unknown[]
+              | string
+              | number
+              | boolean
+              | null;
+          };
+          enableLink?: boolean | null;
+          id?: string | null;
+        }[]
+      | null;
+    id?: string | null;
+    blockName?: string | null;
+    blockType: 'content';
+  }[];
+  slug?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
 export interface PayloadPreference {
-  id: string;
+  id: number;
   user: {
     relationTo: 'users';
-    value: string | User;
+    value: number | User;
   };
   key?: string | null;
   value?:
@@ -82,7 +179,7 @@ export interface PayloadPreference {
   createdAt: string;
 }
 export interface PayloadMigration {
-  id: string;
+  id: number;
   name?: string | null;
   batch?: number | null;
   updatedAt: string;
