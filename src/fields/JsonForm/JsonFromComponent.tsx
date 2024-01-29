@@ -10,6 +10,7 @@ import { RJSFSchema, UiSchema } from '@rjsf/utils';
 import validator from '@rjsf/validator-ajv8';
 import Form from '@rjsf/mui';
 
+type SCHEMAS = RJSFSchema | UiSchema
 
 const UISCHEMA: UiSchema = {
   'ui:submitButtonOptions': {
@@ -68,7 +69,7 @@ const filterRequiredFields = (fields: Fields) => {
       return isSchema
     }
   )
-  .reduce((acc, [key, value]) => ({...acc, [getKey(key)]: value}), {schemaField: null, uiSchemaField: null} as {[k:string]: FormField|null})
+  .reduce((acc, [key, field]) => ({...acc, [getKey(key)]: field.value as SCHEMAS}), {schemaField: null, uiSchemaField: null} as {[k:string]: SCHEMAS|null})
 
   return filtered;
 }
@@ -88,24 +89,24 @@ const JsonFromComponent: React.FC<Props> = ({
   // const { value, setValue, showError, errorMessage } = useField<{data:any, schema:RJSFSchema, uiSchema:UiSchema}>({ path })
   const { value, setValue, showError, errorMessage } = useField<any>({ path })
 
-  const {fields: {schemaField, uiSchemaField}, dispatch} = useFormFields(([fields, dispatch]) => ({fields: filterRequiredFields(fields), dispatch}))
+  const {fields: {schema, uiSchema}, dispatch} = useFormFields(([fields, dispatch]) => ({fields: filterRequiredFields(fields), dispatch}))
   // const { value: schema, setValue: setSchema } = useField<RJSFSchema>({ path: 'schema' })
   // const { value: uiSchemaRaw, setValue: setUiSchema } = useField<Props>({ path: 'uiSchema' })
 
-  const {value: schema} = schemaField ?? {value: null}
-  const {value: uiSchemaRaw} = uiSchemaField ?? {value: null}
+  // const {value: schema} = schemaField ?? null
+  // const {value: uiSchemaRaw} = uiSchemaField ?? {value: null}
 
   const editorOptions = admin?.editorOptions
   const { callback, ...componentProps } = config
   const [subject] = useState(new Subject<{data: any, schema: RJSFSchema, uiSchema: UiSchema}>())
 
 
-  const uiSchema = useMemo(
+  const uiSchemaCombined = useMemo(
     () => {
-      const newSchema = uiSchemaRaw ? { ...uiSchemaRaw, ...UISCHEMA } : UISCHEMA;
+      const newSchema = uiSchema ? { ...uiSchema, ...UISCHEMA } : UISCHEMA;
       return newSchema
     },
-    [uiSchemaRaw]
+    [uiSchema]
   );
 
 
@@ -172,7 +173,7 @@ const JsonFromComponent: React.FC<Props> = ({
           id={`field-${path.replace(/\./gi, '__')}`}
           name={path}
           schema={schema}
-          uiSchema={uiSchema}
+          uiSchema={uiSchemaCombined}
           validator={validator}
           formData={value}
           onChange={(data: any) => handleChange(data)}
