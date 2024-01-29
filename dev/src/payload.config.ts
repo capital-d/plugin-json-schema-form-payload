@@ -5,6 +5,7 @@ import Examples from './collections/Examples';
 import { mongooseAdapter } from '@payloadcms/db-mongodb'
 import { webpackBundler } from '@payloadcms/bundler-webpack'
 import { slateEditor } from '@payloadcms/richtext-slate'
+import InnerSchema from './collections/InnerSchema';
 // import { jsonSchemaFormPlugin } from '../../src/index'
 
 export default buildConfig({
@@ -29,7 +30,7 @@ export default buildConfig({
   },
   editor: slateEditor({}),
   collections: [
-    Examples, Users,
+    Examples, Users, InnerSchema
   ],
   typescript: {
     outputFile: path.resolve(__dirname, 'payload-types.ts'),

@@ -55,10 +55,12 @@ type Props = JSONField & {
   }
 }
 
-const getKey = (key: string) => /schema/.test(key) ? 'schemaField' : /ui_schema/.test(key) ? 'uiSchemaField' : key
+const getKey = (key: string) => /schema/.test(key) ? 'schemaField' : /uiSchema/.test(key) ? 'uiSchemaField' : key
 
 const filterRequiredFields = (fields: Fields) => {
   const values = Object.entries(fields)
+
+  console.log(values)
 
   const filtered = values.filter(
     ([key, _]) => {
