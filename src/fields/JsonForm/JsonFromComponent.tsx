@@ -56,22 +56,20 @@ type Props = JSONField & {
   }
 }
 
-const getKey = (key: string) => /schema/.test(key) ? 'schemaField' : /uiSchema/.test(key) ? 'uiSchemaField' : key
+type SchemaKeys = 'schema' | 'uiSchema'
+
+const getKey = (key: string) => /schema/.test(key) ? 'schema' : /uiSchema/.test(key) ? 'uiSchema' : 'never'
 
 const filterRequiredFields = (fields: Fields) => {
   const values = Object.entries(fields)
-
-  console.log(values)
-
   const filtered = values.filter(
     ([key, _]) => {
       const isSchema = /schema|ui_schema/.test(key)
       return isSchema
     }
   )
-  .reduce((acc, [key, field]) => ({...acc, [getKey(key)]: field.value as SCHEMAS}), {schemaField: null, uiSchemaField: null} as {[k:string]: SCHEMAS|null})
-
-  return filtered;
+  .reduce((acc, [key, field]) => ({...acc, [getKey(key)]: field.value as SCHEMAS}), {schema: null, uiSchema: null} as {[k in SchemaKeys]: SCHEMAS|null})
+    return filtered;
 }
 
 const JsonFromComponent: React.FC<Props> = ({
@@ -145,7 +143,6 @@ const JsonFromComponent: React.FC<Props> = ({
 
   const handleChange = (value?: any) => {
     const { formData, schema, uiSchema } = value
-    console.log(formData)
     subject.next({data: formData, schema, uiSchema})
   }
 
