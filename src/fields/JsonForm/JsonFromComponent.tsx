@@ -80,19 +80,12 @@ const JsonFromComponent: React.FC<Props> = ({
   label,
   admin,
   custom,
-  // type,
   ...others
 }) => {
   const { config } = custom
-  // const { value, setValue, showError, errorMessage } = useField<{data:any, schema:RJSFSchema, uiSchema:UiSchema}>({ path })
   const { value, setValue, showError, errorMessage } = useField<any>({ path })
 
   const {fields: {schemaKV, uiSchemaKV}, dispatch} = useFormFields(([fields, dispatch]) => ({fields: filterRequiredFields(fields), dispatch}))
-  // const { value: schema, setValue: setSchema } = useField<RJSFSchema>({ path: 'schema' })
-  // const { value: uiSchemaRaw, setValue: setUiSchema } = useField<Props>({ path: 'uiSchema' })
-
-  // const {value: schema} = schemaField ?? null
-  // const {value: uiSchemaRaw} = uiSchemaField ?? {value: null}
 
   const editorOptions = admin?.editorOptions
   const { callback, ...componentProps } = config
@@ -109,39 +102,22 @@ const JsonFromComponent: React.FC<Props> = ({
     [uiSchema]
   );
 
-  // const uiSchemaCombined = uiSchema ? { ...uiSchema, ...UISCHEMA } : UISCHEMA;
-
   useEffect(() => {
     const subscription = subject.pipe(debounceTime(1000)).subscribe(handleChangeSubscription)
-    // if (value) {
-    //   const {data, schema, uiSchema} = value
-    //   handleChangeSubscription({data, schema, uiSchema})
-    // }
 
     return () => {
       subscription.unsubscribe()
     }
   }, [])
 
-  // useEffect(() => {
-  //   console.log('set schema', schema)
-  //   setSchema(schema)
-  // }, [schema])
-
-  // useEffect(() => {
-  //   console.log('set schema', schema)
-  //   setUiSchema(uiSchema)
-  // }, [uiSchema])
 
   const handleChangeSubscription = ({data, schema, uiSchema}:{data: any, schema: RJSFSchema, uiSchema: UiSchema}) => {
-    // setValue({data, schema, uiSchema})
     
     setValue(data)
     dispatch({type: 'UPDATE', path, value: data})
     dispatch({type: 'UPDATE', path: schemaKey, value: schema})
     dispatch({type: 'UPDATE', path: uiSchemaKey, value: uiSchema})
-    // setSchema(schema)
-    // setUiSchema(uiSchema)
+
   }
 
   const handleChange = (value?: any) => {

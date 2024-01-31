@@ -7,7 +7,7 @@ import { slugField } from '../../fields/slug'
 import { ContentSimple } from '../../blocks/ContentSimple'
 
 export const Simple: CollectionConfig = {
-  slug: 'simple-page',
+  slug: 'simplePage',
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', 'updatedAt'],
@@ -20,9 +20,9 @@ export const Simple: CollectionConfig = {
   hooks: {
     // beforeChange: [populatePublishedAt],
   },
-  versions: {
-    drafts: true,
-  },
+  // versions: {
+  //   drafts: true,
+  // },
   access: {
     read: adminsOrPublished,
     update: admins,

@@ -75,31 +75,6 @@ export const JsonSchemaFormField:JsonFrom = (overrides, config) => {
         access: config.schemas?.access ? { 
           ...config.schemas.access
         } : {},
-        // access: {
-        //   create: ({ req: { user } }: any) => { 
-        //     console.log('user', user)
-        //     //only admins can create
-        //     if(!user) {
-        //       return false
-        //     }
-        //     return true
-        //   },
-        //   read: ({ req: { user } }: any) => { 
-        //     console.log('user', user)
-        //     if (config.hideSchemas) {
-        //       return false
-        //     }
-        //     return true
-        //    },
-        //   update: ({ req: { user } }: any) => { 
-        //     //only admins can update
-        //     console.log('user', user)
-        //     if(!user) {
-        //       return false
-        //     }
-        //     return true
-        //    },
-        // },
         admin: {
           condition: config?.schemas?.condition,
           initCollapsed: true

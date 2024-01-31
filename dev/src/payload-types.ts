@@ -11,7 +11,7 @@ export interface Config {
     jsonformExamples: JsonformExample;
     users: User;
     innerSchema: InnerSchema;
-    'simple-page': SimplePage;
+    simplePage: SimplePage;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
@@ -20,33 +20,35 @@ export interface Config {
 export interface JsonformExample {
   id: number;
   title?: string | null;
-  data:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
-  schema:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
-  uiSchema?:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
+  jsonForm: {
+    data:
+      | {
+          [k: string]: unknown;
+        }
+      | unknown[]
+      | string
+      | number
+      | boolean
+      | null;
+    schema:
+      | {
+          [k: string]: unknown;
+        }
+      | unknown[]
+      | string
+      | number
+      | boolean
+      | null;
+    uiSchema?:
+      | {
+          [k: string]: unknown;
+        }
+      | unknown[]
+      | string
+      | number
+      | boolean
+      | null;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -70,54 +72,7 @@ export interface InnerSchema {
   layout: {
     columns?:
       | {
-          content: {
-            data:
-              | {
-                  [k: string]: unknown;
-                }
-              | unknown[]
-              | string
-              | number
-              | boolean
-              | null;
-            schema:
-              | {
-                  [k: string]: unknown;
-                }
-              | unknown[]
-              | string
-              | number
-              | boolean
-              | null;
-            uiSchema?:
-              | {
-                  [k: string]: unknown;
-                }
-              | unknown[]
-              | string
-              | number
-              | boolean
-              | null;
-          };
-          enableLink?: boolean | null;
-          id?: string | null;
-        }[]
-      | null;
-    id?: string | null;
-    blockName?: string | null;
-    blockType: 'content';
-  }[];
-  updatedAt: string;
-  createdAt: string;
-}
-export interface SimplePage {
-  id: number;
-  title: string;
-  publishedAt?: string | null;
-  layout: {
-    columns?:
-      | {
-          content: {
+          jsonForm: {
             data:
               | {
                   [k: string]: unknown;
@@ -158,6 +113,54 @@ export interface SimplePage {
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+export interface SimplePage {
+  id: number;
+  title: string;
+  publishedAt?: string | null;
+  layout: {
+    columns?:
+      | {
+          jsonForm: {
+            data:
+              | {
+                  [k: string]: unknown;
+                }
+              | unknown[]
+              | string
+              | number
+              | boolean
+              | null;
+            schema:
+              | {
+                  [k: string]: unknown;
+                }
+              | unknown[]
+              | string
+              | number
+              | boolean
+              | null;
+            uiSchema?:
+              | {
+                  [k: string]: unknown;
+                }
+              | unknown[]
+              | string
+              | number
+              | boolean
+              | null;
+          };
+          enableLink?: boolean | null;
+          id?: string | null;
+        }[]
+      | null;
+    id?: string | null;
+    blockName?: string | null;
+    blockType: 'content';
+  }[];
+  slug?: string | null;
+  updatedAt: string;
+  createdAt: string;
 }
 export interface PayloadPreference {
   id: number;

@@ -6,6 +6,7 @@ import { checkUserRoles } from '../utilities/checkUserRoles'
 import { User } from 'payload/dist/auth'
 import { isCondition } from '../access/isCondition'
 import { ContentSimple } from '../blocks/ContentSimple'
+import { slugField } from '../fields/slug'
 
 const InnerSchema: CollectionConfig = {
     slug: 'innerSchema',
@@ -34,6 +35,7 @@ const InnerSchema: CollectionConfig = {
                 },
             ],
         },
+        slugField(),
     ],
 }
 

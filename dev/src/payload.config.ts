@@ -30,6 +30,26 @@ export default buildConfig({
       return newConfig
     },
   },
+    localization: {
+    locales: [
+      {
+        label: {
+          en: 'English', // English label
+          ru: 'Английский', // Norwegian label
+        },
+        code: 'en',
+      },
+      {
+        label: {
+          en: 'Russian', // English label
+          ru: 'Русский', // Norwegian label
+        },
+        code: 'ru',
+      },
+    ],
+    defaultLocale: 'en',
+    fallback: true,
+  },
   editor: slateEditor({}),
   collections: [
     Examples, Users, InnerSchema, Simple
