@@ -56,19 +56,19 @@ type Props = JSONField & {
   }
 }
 
-type SchemaKeys = 'schema' | 'uiSchema'
+type SchemaKeys = 'schemaKV' | 'uiSchemaKV'
 
-const getKey = (key: string) => /schema/.test(key) ? 'schema' : /uiSchema/.test(key) ? 'uiSchema' : 'never'
+const getKey = (key: string) => /schema/.test(key) ? 'schemaKV' : /uiSchema/.test(key) ? 'uiSchemaKV' : 'never'
 
 const filterRequiredFields = (fields: Fields) => {
   const values = Object.entries(fields)
   const filtered = values.filter(
     ([key, _]) => {
-      const isSchema = /schema|ui_schema/.test(key)
+      const isSchema = /schema|uiSchema/.test(key)
       return isSchema
     }
   )
-  .reduce((acc, [key, field]) => ({...acc, [getKey(key)]: field.value as SCHEMAS}), {schema: null, uiSchema: null} as {[k in SchemaKeys]: SCHEMAS|null})
+  .reduce((acc, [key, field]) => ({...acc, [getKey(key)]: [key, field.value] }), {schemaKV: null, uiSchemaKV: null} as {[k in SchemaKeys]: [string, SCHEMAS]|null})
     return filtered;
 }
 
@@ -87,7 +87,7 @@ const JsonFromComponent: React.FC<Props> = ({
   // const { value, setValue, showError, errorMessage } = useField<{data:any, schema:RJSFSchema, uiSchema:UiSchema}>({ path })
   const { value, setValue, showError, errorMessage } = useField<any>({ path })
 
-  const {fields: {schema, uiSchema}, dispatch} = useFormFields(([fields, dispatch]) => ({fields: filterRequiredFields(fields), dispatch}))
+  const {fields: {schemaKV, uiSchemaKV}, dispatch} = useFormFields(([fields, dispatch]) => ({fields: filterRequiredFields(fields), dispatch}))
   // const { value: schema, setValue: setSchema } = useField<RJSFSchema>({ path: 'schema' })
   // const { value: uiSchemaRaw, setValue: setUiSchema } = useField<Props>({ path: 'uiSchema' })
 
@@ -98,6 +98,8 @@ const JsonFromComponent: React.FC<Props> = ({
   const { callback, ...componentProps } = config
   const [subject] = useState(new Subject<{data: any, schema: RJSFSchema, uiSchema: UiSchema}>())
 
+  const [schemaKey, schema] = schemaKV ?? ['schema', null]
+  const [uiSchemaKey, uiSchema] = uiSchemaKV ?? ['uiSchema', null]
 
   const uiSchemaCombined = useMemo(
     () => {
@@ -107,6 +109,7 @@ const JsonFromComponent: React.FC<Props> = ({
     [uiSchema]
   );
 
+  // const uiSchemaCombined = uiSchema ? { ...uiSchema, ...UISCHEMA } : UISCHEMA;
 
   useEffect(() => {
     const subscription = subject.pipe(debounceTime(1000)).subscribe(handleChangeSubscription)
@@ -131,12 +134,12 @@ const JsonFromComponent: React.FC<Props> = ({
   // }, [uiSchema])
 
   const handleChangeSubscription = ({data, schema, uiSchema}:{data: any, schema: RJSFSchema, uiSchema: UiSchema}) => {
-    console.log('set value', data)
     // setValue({data, schema, uiSchema})
+    
     setValue(data)
-    dispatch({type: 'UPDATE', path: 'data', value: data})
-    dispatch({type: 'UPDATE', path: 'schema', value: schema})
-    dispatch({type: 'UPDATE', path: 'uiSchema', value: uiSchema})
+    dispatch({type: 'UPDATE', path, value: data})
+    dispatch({type: 'UPDATE', path: schemaKey, value: schema})
+    dispatch({type: 'UPDATE', path: uiSchemaKey, value: uiSchema})
     // setSchema(schema)
     // setUiSchema(uiSchema)
   }

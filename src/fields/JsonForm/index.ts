@@ -130,7 +130,9 @@ export const JsonSchemaFormField:JsonFrom = (overrides, config) => {
                 },
                 access: config.schemas?.access ? { 
                   ...config.schemas.access
-                } : {},
+                } : {
+                  read: () => true
+                },
               },
             ]
           }
