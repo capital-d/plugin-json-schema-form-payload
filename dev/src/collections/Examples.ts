@@ -18,6 +18,12 @@ const JsonFromExamples: CollectionConfig = {
       name: 'title',
       type: 'text',
     },
+    {
+      name: 'backgroundImage', // required
+      type: 'upload', // required
+      relationTo: 'media', // required
+      required: true,
+    },
     jsonForm(),
   ],
 }

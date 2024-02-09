@@ -5,6 +5,7 @@ import { adminsOrPublished } from '../../access/adminsOrPublished'
 import { slugField } from '../../fields/slug'
 // import { populatePublishedAt } from '../../hooks/populatePublishedAt'
 import { ContentSimple } from '../../blocks/ContentSimple'
+import richText from '../../fields/richTextLexical'
 
 export const Simple: CollectionConfig = {
   slug: 'simplePage',
@@ -42,6 +43,8 @@ export const Simple: CollectionConfig = {
         position: 'sidebar',
       },
     },
+    richText({
+    }),
     {
       type: 'tabs',
       tabs: [

@@ -1,14 +1,23 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Label, useField, useFormFields } from 'payload/components/forms'
 import Error from 'payload/dist/admin/components/forms/Error'
-import { type TextField, type NumberField, type JSONField, type Fields, FormField } from 'payload/types'
+import { type TextField, type NumberField, type JSONField, type Fields, FormField, Collection, SanitizedCollectionConfig } from 'payload/types'
 
-import { JsonFromConfig } from '.'
+import { JsonFromConfig } from '../'
 import FieldDescription from 'payload/dist/admin/components/forms/FieldDescription'
+import {Upload} from 'payload/dist/admin/components/views/collections/Edit/Upload'
+
+
 import { debounceTime, Subject } from 'rxjs'
-import { RJSFSchema, UiSchema } from '@rjsf/utils';
-import validator from '@rjsf/validator-ajv8';
+import { RegistryWidgetsType, RJSFSchema, UiSchema } from '@rjsf/utils';
 import Form from '@rjsf/mui';
+import validator from '@rjsf/validator-ajv8';
+// import { JsonForms } from '@jsonforms/react';
+// import { materialRenderers } from '@jsonforms/material-renderers';
+// import { createAjv, UISchemaElement, JsonSchema  } from "@jsonforms/core";  
+import { useConfig } from 'payload/dist/admin/components/utilities/Config'
+
+
 
 type SCHEMAS = RJSFSchema | UiSchema
 
@@ -18,6 +27,7 @@ const UISCHEMA: UiSchema = {
     submitText: 'Submit',
   },
 };
+
 
 const SCHEMA: RJSFSchema = {
   "type": "array",
@@ -47,6 +57,7 @@ const SCHEMA: RJSFSchema = {
 }
 
 type Props = JSONField & {
+  slug: string,
   path: string
   readOnly?: boolean
   placeholder?: string
@@ -55,6 +66,16 @@ type Props = JSONField & {
     config: JsonFromConfig
   }
 }
+
+
+const getFileUiSchema = ({key, collection}: {key: string, collection: SanitizedCollectionConfig}) => ({
+  [key]: {
+    "ui:options": {
+      collection,
+    }
+  }
+})
+
 
 type SchemaKeys = 'schemaKV' | 'uiSchemaKV'
 
@@ -88,15 +109,24 @@ const JsonFromComponent: React.FC<Props> = ({
   const {fields: {schemaKV, uiSchemaKV}, dispatch} = useFormFields(([fields, dispatch]) => ({fields: filterRequiredFields(fields), dispatch}))
 
   const editorOptions = admin?.editorOptions
-  const { callback, ...componentProps } = config
+  const { callback, relationTo = 'media', ...componentProps } = config
   const [subject] = useState(new Subject<{data: any, schema: RJSFSchema, uiSchema: UiSchema}>())
 
   const [schemaKey, schema] = schemaKV ?? ['schema', null]
   const [uiSchemaKey, uiSchema] = uiSchemaKV ?? ['uiSchema', null]
 
+  const globalConfig = useConfig()
+
+  const { collections, routes: { api } = {}, serverURL } = globalConfig
+
+  const mediaCollection = collections?.find((coll) => coll.slug === relationTo) || undefined
+
   const uiSchemaCombined = useMemo(
     () => {
-      const newSchema = uiSchema ? { ...uiSchema, ...UISCHEMA } : UISCHEMA;
+
+      //check if file field is presented is schema
+
+      const newSchema = uiSchema ? { ...uiSchema, ...UISCHEMA, ...(mediaCollection ? getFileUiSchema({key: 'file', collection: mediaCollection}) : {}) } : { ...UISCHEMA, ...(mediaCollection ? getFileUiSchema({key: 'file', collection: mediaCollection}) : {}) } ;
       return newSchema
     },
     [uiSchema]
@@ -158,9 +188,11 @@ const JsonFromComponent: React.FC<Props> = ({
           readonly={readOnly}
           liveOmit={true}
           omitExtraData={true}
+          // widgets={customWidgets}
           {...componentProps}
         />}
       </div>
+      {mediaCollection && <Upload collection={mediaCollection} />}
       <FieldDescription
         className={`field-description-${path.replace(/\./g, '__')}`}
         description={admin?.description}

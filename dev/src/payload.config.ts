@@ -5,9 +5,12 @@ import Examples from './collections/Examples';
 import { mongooseAdapter } from '@payloadcms/db-mongodb'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { webpackBundler } from '@payloadcms/bundler-webpack'
+import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { slateEditor } from '@payloadcms/richtext-slate'
 import InnerSchema from './collections/InnerSchema';
 import { Simple } from './collections/Simple';
+import { Media } from './collections/Media';
+import { Images } from './collections/Images';
 // import { jsonSchemaFormPlugin } from '../../src/index'
 
 export default buildConfig({
@@ -50,10 +53,15 @@ export default buildConfig({
     defaultLocale: 'en',
     fallback: true,
   },
-  editor: slateEditor({}),
+  editor: lexicalEditor({}),
   collections: [
-    Examples, Users, InnerSchema, Simple
+    Examples, Users, InnerSchema, Simple, Media, Images
   ],
+  upload: {
+    limits: {
+      fileSize: 25000000, // 5MB, written in bytes
+    },
+  },
   typescript: {
     outputFile: path.resolve(__dirname, 'payload-types.ts'),
   },

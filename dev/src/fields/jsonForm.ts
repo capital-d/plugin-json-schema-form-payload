@@ -9,12 +9,15 @@ import deepMerge from '../utilities/deepMerge'
 
 type JsonForm = (
   overrides?: Partial<Field>,
-  fields?: Field[]
+  fields?: Field[],
+  relationTo?: string,
+
 ) => Field
 
 export const jsonForm: JsonForm = (
   overrides,
-  fields
+  fields,
+  relationTo,
 ) =>
   deepMerge<Field, Partial<Field>>(
     {
@@ -29,6 +32,7 @@ export const jsonForm: JsonForm = (
             localized: true
           },
           {
+            relationTo,
             hideSchemas: true,
             required: true,
             readOnly: false,

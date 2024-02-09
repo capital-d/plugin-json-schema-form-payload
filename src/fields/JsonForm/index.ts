@@ -3,11 +3,12 @@ import type { CollectionAfterReadHook, CollectionConfig, Condition, Field, Field
 import deepMerge from '../../utilities/deepMerge'
 // import { NumberField as NumberFieldType, JSONField } from 'payload/types'
 import { PartialRequired } from '../../utilities/partialRequired'
-import JsonFromComponent from './JsonFromComponent'
+import JsonFromComponent from './rjsf'
 
 type FieldTypes = JSONField
 
 export interface JsonFromConfig {
+  relationTo?: string,
   required: boolean,
   readOnly: boolean,
   hideSchemas?: boolean,
