@@ -21,6 +21,10 @@ export const extendWebpackConfig =
           // Add additional aliases here like so:
           [path.resolve(__dirname, './yourFileHere')]: mockModulePath,
         },
+        fallback: {
+          ...(existingWebpackConfig.resolve?.fallback ? existingWebpackConfig.resolve.fallback : {}),
+          util: require.resolve("util/")
+        },
       },
     }
 
