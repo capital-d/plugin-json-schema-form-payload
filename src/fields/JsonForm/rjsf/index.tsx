@@ -230,7 +230,6 @@ const JsonFromComponent: React.FC<Props> = ({
 
 
   const handleChangeSubscription = ({ data, schema, uiSchema }: { data: any, schema: RJSFSchema, uiSchema: UiSchema }) => {
-    console.log(data)
     setValue(data)
     dispatch({ type: 'UPDATE', path, value: data })
     dispatch({ type: 'UPDATE', path: schemaKey, value: schema })

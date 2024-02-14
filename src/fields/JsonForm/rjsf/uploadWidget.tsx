@@ -62,7 +62,6 @@ const admin = {
 }
 
 export const uploadWidget = function (props: WidgetProps) {
-  console.log(props)
   const { value = null, name } = props
   const { relationTo } = props.options as { relationTo: string }
 
@@ -80,11 +79,9 @@ export const uploadWidget = function (props: WidgetProps) {
     `${serverURL}${api}/${relationTo}/${value}`,
     { initialParams },
   )
-  console.log(`${serverURL}${api}/${relationTo}/${value?.id}`)
-  console.log(data)
+
 
   const onChange = (event: any) => {
-    console.log(event)
     props.onChange({ id: event, path: 'str' })
   }
   return (

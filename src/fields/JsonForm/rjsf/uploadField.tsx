@@ -30,7 +30,6 @@ export const uploadField = function (props: FieldProps) {
   //path is not used
   const { relationTo = 'media', path } = uiOptions as UiOptionsUpload ?? {}
 
-  console.log(name, relationTo)
 
   // const { relationTo } = props.options as {relationTo: string}
 

@@ -49,13 +49,8 @@ export type Props = Omit<UploadField, 'type'> & {
       onChange,
     } = props
 
-    console.log(relationTo)
   
     const collection = collections.find((coll) => coll.slug === relationTo)
-
-    console.log(collections)
-    console.log(collection)
-
   
     const memoizedValidate = useCallback(
       (value, options) => {
