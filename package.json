@@ -29,7 +29,8 @@
   "author": "dev@payloadcms.com",
   "license": "MIT",
   "peerDependencies": {
-    "payload": "^2.2.0"
+    "payload": "^2.2.0",
+    "tsc": "^2.0.4"
   },
   "devDependencies": {
     "@payloadcms/eslint-config": "^1.1.0",
@@ -47,7 +48,6 @@
     "payload": "^2.9.0",
     "prettier": "^2.7.1",
     "react": "^18.2.0",
-    "tsc": "^2.0.4",
     "typescript": "^5.3.3",
     "webpack": "^5.89.0"
   },
