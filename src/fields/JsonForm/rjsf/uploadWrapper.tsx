@@ -53,7 +53,7 @@ export type Props = Omit<UploadField, 'type'> & {
     const collection = collections.find((coll) => coll.slug === relationTo)
   
     const memoizedValidate = useCallback(
-      (value, options) => {
+      (value:unknown, options:Record<string, unknown>) => {
         return validate(value, { ...options, required })
       },
       [validate, required],
@@ -71,7 +71,8 @@ export type Props = Omit<UploadField, 'type'> & {
     const [value, setValue] = useState(defaultValue)
 
     const onChangeLitener = useCallback(
-      (incomingValue) => {
+      (incomingValue:Record<string, unknown> | unknown) => {
+        //@ts-expect-error
         const incomingID = incomingValue?.id || incomingValue
         setValue(incomingID)
         onChange(incomingID)
